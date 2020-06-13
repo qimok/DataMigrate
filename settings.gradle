@@ -1,0 +1,4 @@
+rootProject.name = 'data'
+include 'api'
+include 'service'
+

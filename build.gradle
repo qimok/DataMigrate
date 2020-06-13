@@ -1,0 +1,110 @@
+buildscript {
+    ext {
+        springBootPluginVersion = '2.1.9.RELEASE'
+        ehcacheVersion = '2.10.4'
+        mysqlConnectorVersion = '5.1.44'
+        lombokVersion = '1.16.18'
+        springfoxVersion = '2.6.1'
+        mybatisVersion = '3.4.5'
+        mybatisStarterVersion = '1.3.0'
+        hikariCPVersion = '2.5.1'
+        commonMapperVersion = '3.4.4'
+        commonsIOVersion = '2.4'
+        commonsLangversion = '3.7'
+        commonsCodecVersion = '1.11'
+        fastJsonVersion = '1.2.41'
+        flywayVersion = '5.2.4'
+        guavaVersion = '29.0-jre'
+        collectionsVersion = '3.2.2'
+    }
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+        maven { url "http://repo.spring.io/release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootPluginVersion}")
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.1.9.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+group = 'com.qimok'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    mavenCentral()
+    maven { url "http://repo.spring.io/release" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/snapshot" }
+}
+
+dependencies {
+    // swagger
+    compile("io.springfox:springfox-swagger-ui:$springfoxVersion")
+    testCompile("io.springfox:springfox-staticdocs:$springfoxVersion")
+    compile("io.springfox:springfox-swagger2:$springfoxVersion")
+    compile("io.springfox:springfox-bean-validators:$springfoxVersion")
+
+    // web
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootPluginVersion}")
+
+    // aop
+    compile("org.springframework.boot:spring-boot-starter-aop:${springBootPluginVersion}")
+
+    // jdbc
+    compile("org.springframework.boot:spring-boot-starter-jdbc:${springBootPluginVersion}")
+
+    // 模板引擎
+    compile("org.springframework.boot:spring-boot-starter-freemarker:${springBootPluginVersion}")
+
+    // 数据库驱动
+    compile("mysql:mysql-connector-java:${mysqlConnectorVersion}")
+
+    // 连接池
+    compile("com.zaxxer:HikariCP:${hikariCPVersion}")
+
+    // 热部署
+    compile("org.springframework.boot:spring-boot-devtools:${springBootPluginVersion}")
+
+    // redis
+    compile("org.springframework.boot:spring-boot-starter-data-redis:${springBootPluginVersion}")
+
+    // commons-lang3
+    compile("org.apache.commons:commons-lang3:${commonsLangversion}")
+
+    // commons-collections
+    compile("commons-collections:commons-collections:$collectionsVersion")
+
+    // lombok
+    compile("org.projectlombok:lombok:${lombokVersion}")
+
+    // Flyway
+    compile("org.flywaydb:flyway-core:$flywayVersion")
+
+    // guava
+    compile("com.google.guava:guava")
+
+}
+
+test {
+    useJUnitPlatform()
+}

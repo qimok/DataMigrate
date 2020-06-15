@@ -17,6 +17,11 @@ public interface RedisService {
     String getValue(String key);
 
     /**
+     * 删除指定 key
+     */
+    Boolean delKey(String key);
+
+    /**
      * 获取原来key键对应的值并重新赋新值
      */
     String getAndSet(String key, String value);

@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import static com.qimok.migrate.model.ModelConstants.*;
 
 /**
@@ -65,14 +63,23 @@ public class DataMigrateHandlerJob {
          *     ...
          */
         String firstStr = target.substring(0, target.indexOf("."));
-        Integer execFlag = StringUtils.isNumeric(firstStr) ? Integer.valueOf(firstStr) : 0;
-        // 假如是需要单实例执行的任务，需要抢占锁，抢占成功，则继续；抢占失败，则结束
-        if ((execFlag & 1) == 1 && !isCurrInstanceExec(target)) {
-            // 当执行标识为 1 时，当前实例没有抢到执行权，则退出任务
+        Integer execFlag = org.apache.commons.lang3.StringUtils.isNumeric(firstStr) ? Integer.valueOf(firstStr) : 0;
+        // 单实例、单线程执行任务
+        if ((execFlag & 1) == 1) {
+            Boolean isExec = redisService.setIfAbsent(target, target, 3000L);
+            if (isExec) {
+                // 当前实例抢到执行权
+                try {
+                    shardingMigrate(target, execFlag, threadNum, qps, everyCommitCount);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    redisService.delKey(target);
+                }
+            }
             return;
         }
-        // 当执行标识为 1 时，需要指定线程数量为 1
-        threadNum = (execFlag & 1) == 1 ? 1 : threadNum;
+        // 多实例、多线程执行任务
         shardingMigrate(target, execFlag, threadNum, qps, everyCommitCount);
     }
 
@@ -113,13 +120,6 @@ public class DataMigrateHandlerJob {
                     threadNum, String.format("%.4f", (endTime - beginTime) / 1000d)));
             executorService.shutdown();
         }
-    }
-
-    /**
-     * 当前实例是否可以执行
-     */
-    private Boolean isCurrInstanceExec(String target) {
-        return redisService.setIfAbsent(target, target, 3000L);
     }
 
 }

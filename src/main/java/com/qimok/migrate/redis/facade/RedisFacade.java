@@ -46,6 +46,11 @@ public class RedisFacade implements RedisService {
     }
 
     @Override
+    public Boolean delKey(String key) {
+        return redisTemplate.opsForValue().getOperations().delete(key);
+    }
+
+    @Override
     public String getAndSet(String key, String value) {
         return redisTemplate.opsForValue().getAndSet(key, value);
     }

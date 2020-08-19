@@ -46,4 +46,13 @@ public interface IDataMigrateReady {
         return 0;
     }
 
+    /**
+     * 获取分表数量
+     *
+     * @return
+     */
+    default Integer getSubTableNum() {
+        return 30;
+    }
+
 }

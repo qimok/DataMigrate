@@ -2,9 +2,9 @@ package com.qimok.migrate.service;
 
 import com.qimok.migrate.ready.clean.MessageCleanReady;
 import com.qimok.migrate.ready.migrate.MessageMigrateReady;
+import com.qimok.migrate.ready.migrate.MessageSubTableMigrateReady;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import static com.qimok.migrate.model.ModelConstants.*;
 
 /**
@@ -19,6 +19,9 @@ public class DataMigrateTransferringService {
     private MessageMigrateReady messageMigrateReady;
 
     @Autowired
+    private MessageSubTableMigrateReady messageSubTableMigrateReady;
+
+    @Autowired
     private MessageCleanReady messageCleanReady;
 
     /**
@@ -29,6 +32,8 @@ public class DataMigrateTransferringService {
             // -------------- 迁移任务 --------------
             case MESSAGE_MIGRATE:
                 return messageMigrateReady;
+            case MESSAGE_SUB_TABLE_MIGRATE:
+                return messageSubTableMigrateReady;
             // -------------- 清理任务 --------------
             case MESSAGE_CLEAN:
                 return messageCleanReady;

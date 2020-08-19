@@ -17,9 +17,14 @@ public final class ModelConstants {
     public static final String DATA_MIGRATE_OFFSET = "data:migrate:offset";
 
     /**
-     * 所有数据迁移的 task
+     * 消息表迁移的 task
      */
     public static final String MESSAGE_MIGRATE = "message.migrate";
+
+    /**
+     * 消息分表迁移的 task
+     */
+    public static final String MESSAGE_SUB_TABLE_MIGRATE = "message.sub.table.migrate";
 
     /**
      * 清理脏数据的 task

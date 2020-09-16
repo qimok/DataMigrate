@@ -1,6 +1,7 @@
 package com.qimok.migrate.service;
 
 import com.qimok.migrate.jdbc.JdbcConnection;
+import com.qimok.migrate.ready.IDataMigrateReady;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 /**
  * @author qimok
- * @description 数据迁移执行器
+ * @description 数据迁移执行器(单表数据迁移 or 数据清理)
  * @since 2020-06-1 10:07
  */
 @Slf4j

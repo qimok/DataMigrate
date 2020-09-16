@@ -1,6 +1,6 @@
 package com.qimok.migrate.ready.clean;
 
-import com.qimok.migrate.service.IDataMigrateReady;
+import com.qimok.migrate.ready.IDataMigrateReady;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

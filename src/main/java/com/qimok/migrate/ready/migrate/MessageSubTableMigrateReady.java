@@ -1,8 +1,7 @@
 package com.qimok.migrate.ready.migrate;
 
-import com.qimok.migrate.service.IDataMigrateReady;
+import com.qimok.migrate.ready.IDataMigrateReady;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +21,18 @@ public class MessageSubTableMigrateReady implements IDataMigrateReady {
     public String getQuerySql(String target, Long currId, Long idLe, List<Long> groupIdIn, Optional<Long> createdGte) {
         return "select session_root_id as shardingColumn, message_id as t1, guid as t2, \n" +
                 "session_root_id as t3,  \n" +
-                "session_id as t4, consult_channel as t5, sender_id as t6, \n" +
-                "sender_role as t7, sender as t8, message_source as t9, message_type as t10,  \n" +
-                "content as t11, status as t12, sender_visible as t13, \n" +
-                "visible_roles as t14, extra as t15\n" +
-                "from sharding_test.message where id >= " + currId + " and id <= " + idLe;
+                "aaa as t4, bbb as t5, ccc as t6, \n" +
+                "ddd as t7, eee as t8, fff as t9, ggg as t10,  \n" +
+                "content as t11, hhh as t12, iii as t13, \n" +
+                "jjj as t14, kkk as t15\n" +
+                "from message where id >= " + currId + " and id <= " + idLe;
     }
 
     @Override
     public String getExecSql() {
-        return "insert ignore into sharding.message_* (message_id, out_message_id, guid, session_root_id,  \n" +
-                "session_id, consult_channel, sender_id, sender_role, sender, message_source, message_type,  \n" +
-                "content, status, sender_visible, visible_roles, extra) Values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        return "insert ignore into message_* (message_id, out_message_id, guid, session_root_id,  \n" +
+                "aaa, bbb, ccc, ddd, eee, fff, ggg,  \n" +
+                "content, hhh, iii, jjj, kkk) Values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override

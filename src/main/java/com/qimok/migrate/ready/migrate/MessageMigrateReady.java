@@ -1,11 +1,9 @@
 package com.qimok.migrate.ready.migrate;
 
-import com.qimok.migrate.service.IDataMigrateReady;
+import com.qimok.migrate.ready.IDataMigrateReady;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
-
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 /**
@@ -41,8 +39,8 @@ public class MessageMigrateReady implements IDataMigrateReady {
     @Override
     public String getExecSql() {
         return "insert ignore into target.message (group_id, message_id, guid,\n" +
-                " sender_id, sender_role, sender, message_source, content, status,\n" +
-                "visible_roles, created, updated)\n" +
+                "...\n" +
+                "created, updated)\n" +
                 "SELECT group_id, ?, ?, \n" +
                 " ... " +
                 " message_source, " +

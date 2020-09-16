@@ -1,4 +1,4 @@
-package com.qimok.migrate.service;
+package com.qimok.migrate.ready;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +34,9 @@ public interface IDataMigrateReady {
      *
      * @return
      */
-    Integer getFieldNum();
+    default Integer getFieldNum() {
+        return 0;
+    }
 
     /**
      * 获取源标识【当 source 库与 target 库在不同数据库实例上时，实现类需要重写此方法】
@@ -47,12 +49,15 @@ public interface IDataMigrateReady {
     }
 
     /**
-     * 获取分表数量
-     *
+     * 获取分表配置参数
      * @return
      */
-    default Integer getSubTableNum() {
-        return 30;
+    default SubTableParameters getSubTableParameters() {
+        return SubTableParameters.builder()
+                .shardingColumn("session_root_id")
+                .subTableNum(32)
+                .shardingAlgorithm(0)
+                .build();
     }
 
 }

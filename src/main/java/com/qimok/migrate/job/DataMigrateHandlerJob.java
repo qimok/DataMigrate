@@ -2,6 +2,7 @@ package com.qimok.migrate.job;
 
 import com.google.common.collect.Lists;
 import com.qimok.migrate.redis.RedisService;
+import com.qimok.migrate.service.DataMigrateAllSubTableExecutingService;
 import com.qimok.migrate.service.DataMigrateExecutingService;
 import com.qimok.migrate.service.DataMigrateSubTableExecutingService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +18,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.qimok.migrate.model.ModelConstants.DATA_MIGRATE_OFFSET;
-import static com.qimok.migrate.model.ModelConstants.DATA_MIGRATE_TASK;
+import static com.qimok.migrate.model.ModelConstants.*;
 
 /**
  * @author qimok
@@ -52,6 +52,9 @@ public class DataMigrateHandlerJob {
 
     @Autowired
     private DataMigrateSubTableExecutingService subTableExecutingService;
+
+    @Autowired
+    private DataMigrateAllSubTableExecutingService allSubTableExecutingService;
 
     /**
      * 数据迁移，不重复
@@ -118,8 +121,15 @@ public class DataMigrateHandlerJob {
                             offset, currId, idLe) + "开始...");
                     if (isSubTable) {
                         // 【往水平分表的各个分表中迁移数据】sourceTable 与 targetTable：一对多
-                        subTableExecutingService.executeMigrate(target, offset, currId, idLe, everyCommitCount,
-                                Lists.newArrayList(), Optional.empty());
+                        if (target.equals(MESSAGE_ALL_SUB_TABLE_MIGRATE_READY)) {
+                            // 同时进行
+                            allSubTableExecutingService.executeMigrate(target, offset, currId, idLe, everyCommitCount,
+                                    Lists.newArrayList(), Optional.empty());
+                        } else {
+                            // 按分表进行
+                            subTableExecutingService.executeMigrate(target, offset, currId, idLe, everyCommitCount,
+                                    Lists.newArrayList(), Optional.empty());
+                        }
                     } else {
                         // sourceTable 与 targetTable：一对一
                         executingService.executeMigrate(target, offset, currId, idLe, everyCommitCount,
